@@ -5,41 +5,45 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../const/app_colors.dart';
-import './registration_screen.dart';
-import './bottom_nav_controller.dart';
+import './login_screen.dart';
+import './user_form.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegistrationScreen extends StatefulWidget {
+  const RegistrationScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegistrationScreen> createState() => _RegistrationScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegistrationScreenState extends State<RegistrationScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   bool _paswordHidden = true;
 
-  signIn() async {
+  signUp() async {
     try {
       UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
       );
       var authCredential = userCredential.user;
       print(authCredential!.uid);
-      if (authCredential.uid.isNotEmpty) {
-        Navigator.push(
-            context, CupertinoPageRoute(builder: (_) => BottomNavController()));
+      if (_passwordController.text != _confirmPasswordController.text) {
+        Fluttertoast.showToast(msg: "Password not match!");
+      } else if (authCredential.uid.isNotEmpty) {
+        Navigator.push(context, CupertinoPageRoute(builder: (_) => UserForm()));
       } else {
-        Fluttertoast.showToast(msg: "Something is wrong");
+        Fluttertoast.showToast(msg: "Something went wrong!");
       }
     } on FirebaseAuthException catch (error) {
-      if (error.code == 'user-not-found') {
-        Fluttertoast.showToast(msg: "No user found for that email.");
-      } else if (error.code == 'wrong-password') {
-        Fluttertoast.showToast(msg: "Wrong password provided for that user.");
+      if (error.code == 'weak-password') {
+        Fluttertoast.showToast(msg: "The password provided is too weak.");
+      } else if (error.code == 'email-already-in-use') {
+        Fluttertoast.showToast(
+            msg: "The account already exists for that email.");
       }
     } catch (error) {
       print(error);
@@ -66,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextButton(
                       onPressed: null,
                       child: Text(
-                        'Sign In',
+                        'Sign Up',
                         style: TextStyle(fontSize: 22.sp, color: Colors.white),
                       ),
                     ),
@@ -93,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         SizedBox(height: 20.h),
                         Text(
-                          'Welcome Back Buddy!',
+                          'Welcome Buddy!',
                           style: TextStyle(
                             fontSize: 22.sp,
                             color: AppColors.deepOrange,
@@ -101,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         SizedBox(height: 5.h),
                         const Text(
-                          'Glad to see you back buddy.',
+                          'Glad to see you my buddy.',
                           style: TextStyle(color: Colors.grey),
                         ),
                         SizedBox(height: 40.h),
@@ -165,7 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               child: TextField(
                                 controller: _passwordController,
                                 decoration: InputDecoration(
-                                  hintText: 'Enter your password',
+                                  hintText: 'Password must be 6 character long',
                                   hintStyle: TextStyle(
                                     fontSize: 14.sp,
                                     color: Colors.grey,
@@ -202,18 +206,78 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ],
                         ),
+                        SizedBox(height: 30.h),
+                        Row(
+                          children: [
+                            Container(
+                              height: 65.h,
+                              width: 50.w,
+                              decoration: BoxDecoration(
+                                color: AppColors.deepOrange,
+                                borderRadius: BorderRadius.circular(12.r),
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  Icons.lock_outline,
+                                  color: Colors.white,
+                                  size: 20.w,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 10.w),
+                            Expanded(
+                              child: TextField(
+                                controller: _confirmPasswordController,
+                                decoration: InputDecoration(
+                                  hintText: 'Enter the password again',
+                                  hintStyle: TextStyle(
+                                    fontSize: 14.sp,
+                                    color: Colors.grey,
+                                  ),
+                                  labelText: 'CONFIRM PASSWORD',
+                                  labelStyle: TextStyle(
+                                    fontSize: 15.sp,
+                                    color: AppColors.deepOrange,
+                                  ),
+                                  suffixIcon: _paswordHidden == true
+                                      ? IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              _paswordHidden = false;
+                                            });
+                                          },
+                                          icon: Icon(
+                                            Icons.remove_red_eye,
+                                            size: 20.w,
+                                          ))
+                                      : IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              _paswordHidden = true;
+                                            });
+                                          },
+                                          icon: Icon(
+                                            Icons.visibility_off,
+                                            size: 20.w,
+                                          ),
+                                        ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                         SizedBox(height: 50.h),
                         SizedBox(
                           width: 1.sw,
                           height: 56.h,
                           child: ElevatedButton(
-                            onPressed: signIn,
+                            onPressed: signUp,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.deepOrange,
                               elevation: 3,
                             ),
                             child: Text(
-                              'Sign In',
+                              'Sign Up',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18.sp,
@@ -226,7 +290,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Wrap(
                             children: [
                               Text(
-                                "Don't have an account?",
+                                "Already have an account?",
                                 style: TextStyle(
                                   fontSize: 13.sp,
                                   fontWeight: FontWeight.w600,
@@ -236,7 +300,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               SizedBox(width: 5.w),
                               GestureDetector(
                                 child: Text(
-                                  "Sign Up",
+                                  "Sign In",
                                   style: TextStyle(
                                     fontSize: 13.sp,
                                     fontWeight: FontWeight.w600,
@@ -247,8 +311,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   Navigator.push(
                                     context,
                                     CupertinoPageRoute(
-                                      builder: (context) =>
-                                          const RegistrationScreen(),
+                                      builder: (context) => LoginScreen(),
                                     ),
                                   );
                                 },
