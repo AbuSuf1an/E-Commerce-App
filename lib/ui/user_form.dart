@@ -50,8 +50,8 @@ class _UserFormState extends State<UserForm> {
           "gender": _genderController.text,
           "age": _ageController.text,
         })
-        .then((value) => Navigator.push(
-            context, MaterialPageRoute(builder: (_) => BottomNavController())))
+        .then((value) => Navigator.push(context,
+            MaterialPageRoute(builder: (_) => const BottomNavController())))
         .catchError((error) => print("Something went wrong. $error"));
   }
 
