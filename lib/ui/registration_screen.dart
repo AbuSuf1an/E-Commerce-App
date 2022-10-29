@@ -168,6 +168,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             Expanded(
                               child: TextField(
                                 controller: _passwordController,
+                                obscureText: _paswordHidden,
                                 decoration: InputDecoration(
                                   hintText: 'Password must be 6 character long',
                                   hintStyle: TextStyle(
@@ -187,7 +188,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                             });
                                           },
                                           icon: Icon(
-                                            Icons.remove_red_eye,
+                                            Icons.visibility_off,
                                             size: 20.w,
                                           ))
                                       : IconButton(
@@ -197,7 +198,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                             });
                                           },
                                           icon: Icon(
-                                            Icons.visibility_off,
+                                            Icons.remove_red_eye,
                                             size: 20.w,
                                           ),
                                         ),
@@ -228,6 +229,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             Expanded(
                               child: TextField(
                                 controller: _confirmPasswordController,
+                                obscureText: _paswordHidden,
                                 decoration: InputDecoration(
                                   hintText: 'Enter the password again',
                                   hintStyle: TextStyle(
@@ -247,7 +249,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                             });
                                           },
                                           icon: Icon(
-                                            Icons.remove_red_eye,
+                                            Icons.visibility_off,
                                             size: 20.w,
                                           ))
                                       : IconButton(
@@ -257,7 +259,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                             });
                                           },
                                           icon: Icon(
-                                            Icons.visibility_off,
+                                            Icons.remove_red_eye,
                                             size: 20.w,
                                           ),
                                         ),

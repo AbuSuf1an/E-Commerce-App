@@ -164,6 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             Expanded(
                               child: TextField(
                                 controller: _passwordController,
+                                obscureText: _paswordHidden,
                                 decoration: InputDecoration(
                                   hintText: 'Enter your password',
                                   hintStyle: TextStyle(
@@ -183,7 +184,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             });
                                           },
                                           icon: Icon(
-                                            Icons.remove_red_eye,
+                                            Icons.visibility_off,
                                             size: 20.w,
                                           ))
                                       : IconButton(
@@ -193,7 +194,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             });
                                           },
                                           icon: Icon(
-                                            Icons.visibility_off,
+                                            Icons.remove_red_eye,
                                             size: 20.w,
                                           ),
                                         ),

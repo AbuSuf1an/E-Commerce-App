@@ -8,6 +8,6 @@ class BottomNavController extends StatefulWidget {
 class _BottomNavControllerState extends State<BottomNavController> {
   @override
   Widget build(BuildContext context) {
-    return const Text('This is bottom nav controller page');
+    return Scaffold(body: Text('This is bottom nav controller page'));
   }
 }
