@@ -37,7 +37,7 @@ class _BottomNavControllerState extends State<BottomNavController> {
         elevation: 10,
         selectedItemColor: AppColors.deepOrange,
         backgroundColor: Colors.white,
-        unselectedItemColor: Colors.grey,
+        unselectedItemColor: Colors.grey[700],
         currentIndex: _currentIndex,
         selectedLabelStyle:
             const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
